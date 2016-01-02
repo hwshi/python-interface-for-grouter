@@ -68,21 +68,6 @@ class CoAPCore(object):
 
 core = CoAPCore()
 
-# def Thread2():
-#     while True:
-#         time.sleep(2)
-#         print("this is T2")
-# thread.start_new_thread( Thread2(), ())
-# thread.start_new_thread( core.check(), ())
-
-
-# thread_check = Thread(target = core.check(),)
-# thread_2 = Thread(target = Thread2(),)
-# thread_2.join()
-# thread_check.join()
-
-
-
 # easy debug:
 core.port_set.add(8888)
 
