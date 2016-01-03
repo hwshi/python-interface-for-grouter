@@ -4,12 +4,6 @@ __author__ = 'Haowei Shi'
 from ginilib import *
 
 print("--    SIMPLE UDP IMPLEMENTATION FOR GINI    --")
-# class ri(Packet):
-#     name = "ri"
-#     fields_desc = [ ShortEnumField("sport", 53, {8888 : "test", 7 : "echo"}),
-#                 ShortEnumField("dport", 53, {8888 : "test", 7 : "echo"}),
-#                 ShortField("len", None),
-#                 XShortField("chksum", None), ]
 class UDPPacket(Packet):
     name = "UDPPacket"
     fields_desc = [ ShortEnumField("sport", 53, {8888 : "test", 7 : "echo"}),
@@ -82,14 +76,12 @@ def _echoReply(gpacket):
 def Protocol_Processor(meta_pkt):
     global pcb
     gpacket = GPacket(meta_pkt)
-    # print("gpacket: ", gpacket)
     udp_field = gpacket.packet.payload.payload
     udp_field.show()
     if udp_field.dport == 7:
         print("Receiving an Echo packet..")
         _echoReply(gpacket)
     elif udp_field.dport in pcb.port_set:
-        # udp_field.show()
         print(udp_field.payload)
     else:
         print("Port Unreachable!")
