@@ -137,8 +137,6 @@ void dummyFunction(int sign)
     printf("Signal [%d] is ignored \n", sign);
 }
 
-int GLOBAL_LOCK = 1; //**********************************************
-extern PyThreadState* mainPyThread;
 
 void parseACLICmd(char *str)
 {
@@ -156,7 +154,6 @@ void parseACLICmd(char *str)
             void (*function)();
             function = clie->handler;
             (*function)();
-            //clie->handler((void *)clie);  haowei
         }
         else if (clie->language == PYTHON_FUNCTION)// for python command
         {
@@ -164,54 +161,15 @@ void parseACLICmd(char *str)
             Py_pFun = clie->handler;
             Py_pArg = PyString_FromString(orig_str);
             verbose(2, "[parseACLICmd]Command <%p> is being called\n", Py_pFun);
-            //            if (!GLOBAL_LOCK)
-            //            {
-            //                GLOBAL_LOCK = 1;
-            //                printf("[parseACLICmd]GIL initializing...\n");
-            //                PyEval_InitThreads();
-            //                PyEval_ReleaseLock();
-            //                PyEval_SaveThread();
-            //            }
-
             PyGILState_STATE gstate;
-            printf("[parseACLICmd] check lock..\n");
-//            gstate = PyGILState_Ensure();
-                        PyEval_AcquireLock();
-//            PyEval_RestoreThread(mainPyThread);
+            verbose(2, "[parseACLICmd] check lock..\n");
+            PyEval_AcquireLock();
             verbose(2, "[parseACLICmd]got the lock\n");
             /* Perform Python actions here. */
             Py_pResult = PyObject_CallFunction(Py_pFun, "O", Py_pArg);
             /* evaluate result or handle exception */
-
-
-            printf("[parseACLICmd]ready to release lock\n");
-//            PyGILState_Release(gstate);
-//            mainPyThread= PyEval_SaveThread();
-                        PyEval_ReleaseLock();
-           
-            // debug http://www.ragestorm.net/tutorial?id=25           
-            //              PyEval_RestoreThread(mainPyThread); 
-            //            Py_pResult = PyObject_CallFunction(Py_pFun, "O", Py_pArg);
-            //            printf("[classicalDecisionQProcessor]ready to release lock\n");
-            //            mainPyThread = PyEval_SaveThread();  
-
-            //            if (PyEval_ThreadsInitialized() == 0)
-            //            {
-            //                printf("GIL initializing...\n");
-            //                PyEval_InitThreads();
-            //            }
-            //            else
-            //            {
-            //                PyEval_AcquireLock();
-            //            }
-            //            while(GLOBAL_LOCK == 1){
-            //          
-            //            }
-            //            GLOBAL_LOCK = 1;
-            //            verbose(2, "got the lock\n");
-            //            Py_pResult = PyObject_CallFunction(Py_pFun, "O", Py_pArg);
-            //            PyEval_ReleaseLock();
-            //            GLOBAL_LOCK = 0;
+            verbose(2, "[parseACLICmd]ready to release lock\n");
+            PyEval_ReleaseLock();
             CheckPythonError();
         }
 
