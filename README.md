@@ -1,4 +1,7 @@
 # Python Interface For gRouter
+folder /module/py_module contains implementations of udp_scapy.py and coap.py
+folder /module/c_module contains a draft of C module udp2.c
+
 
 Installation
 gRouter works with GINI platform. The documentation assumes that GINI is already installed in your PC.
@@ -24,16 +27,17 @@ sample for install SWIG on UNIX:
 ```
 
 4. Use the MAKEFILE in the /src direcotry to build the gRouter
+
 5. The module built using Python is dynamically installed into gRouter at run-time.
 After GINI is running. Copy all the needed files into the .gini/data/Router#.
 ```
     _GINIC.so
     GINIC.py
     ginilib.py
-    udp.py
+    udp_scapy.py
 ```
 Open the CLI of gRouter using command "addmod" to install the module.
 ```
-    addmod udp python
+    addmod udp_scapy python
 ```
 if the config function is implemented correctly. A config table will be shown and states that the module is installed.
